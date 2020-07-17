@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option csharp_namespace = "BchainSimServices";
+
+package BchainSimServices;
+
+
+service Config {
+    rpc GetMinerConfig(MinerInfo) returns (MinerConfig) { }
+    rpc UpdateMinerState(MinerStateInfo) returns (EmptyConfigResponse) { }
+}
+
+message MinerConfig {
+
+    // miner id
+    string minerId = 1;
+
+    // mining mode can be AltPoc and stuff
+    string miningMode = 2;
+
+    // challenge size for transaction block
+    int32 transactionBlockChallengeSize = 3;
+
+    // challenge size for transaction block
+    int32 roundBlockChallengeSize = 4;
+
+    // subchain size (number of round blocks between each transaction block)
+    int32 nRoundBlocks = 5;
+}
+
+message MinerInfo {	
+    string minerId = 1;
+    double hashPower = 2;
+}
+
+message MinerStateInfo {
+    MinerInfo minerInfo = 1;
+    MinerState minerState = 2;
+}
+
+enum MinerState {
+    JOINED = 0;
+    LEAVING = 1;
+    
+    ACTIVE = 5;
+    INACTIVE = 6;
+}
+
+
+message EmptyConfigResponse {
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option csharp_namespace = "BchainSimServices";
+
+package BchainSimServices;
+
+
+// Store service is used to mimic sharing of data by the miners
+service GlobalKnowledge {
+    // Publish a mined item
+    
+    // Get transactions to mine - maybe skip this for now, just mine, nothing else
+    // Get progress for a block
+}
