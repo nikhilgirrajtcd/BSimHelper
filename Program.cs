@@ -1,12 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-
-namespace BchainSimServices
+﻿namespace BchainSimServices
 {
     public class Program
     {
@@ -22,6 +14,12 @@ namespace BchainSimServices
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+                .ConfigureLogging(builder =>
+                {
+                    builder.SetMinimumLevel(LogLevel.Trace);
+                    builder.AddLog4Net();
+                })
+                ;
     }
 }

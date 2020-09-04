@@ -5,16 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\Config.proto" GrpcServices="Server">
+    <Protobuf Include="..\Protos\Config.proto" GrpcServices="Server">
       <Link>Protos\Config.proto</Link>
     </Protobuf>
-    <Protobuf Include="Protos\GlobalKnowledge.proto" GrpcServices="Server">
+    <Protobuf Include="..\Protos\GlobalKnowledge.proto" GrpcServices="Server">
       <Link>Protos\GlobalKnowledge.proto</Link>
     </Protobuf>
-    <Protobuf Include="Protos\Log.proto" GrpcServices="Server">
+    <Protobuf Include="..\Protos\Log.proto" GrpcServices="Server">
       <Link>Protos\Log.proto</Link>
     </Protobuf>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+    <Protobuf Include="..\Protos\greet.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +25,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
