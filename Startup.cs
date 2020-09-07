@@ -27,10 +27,9 @@ namespace BchainSimServices
             loggerFactory.AddLog4Net();
 
             app.UseRouting();
-
+            
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
                 endpoints.MapGrpcService<ConfigService>();
                 endpoints.MapGrpcService<LogService>();
                 endpoints.MapGrpcService<GlobalKnowledgeService>();

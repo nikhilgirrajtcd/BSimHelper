@@ -1,4 +1,7 @@
-﻿namespace BchainSimServices
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+
+namespace BchainSimServices
 {
     public class Program
     {
