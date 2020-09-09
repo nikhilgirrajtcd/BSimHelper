@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
+
 using Grpc.Core;
+
 using Microsoft.Extensions.Logging;
 
-namespace BchainSimServices
+namespace BchainSimServices.Services
 {
     public class LogService : Log.LogBase
     {

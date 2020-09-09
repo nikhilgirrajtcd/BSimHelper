@@ -41,8 +41,7 @@ namespace BchainSimServices.Services
             }
         }
 
-
-        public override Task<ChainProgress> GetChainProgress(NothingGk request, ServerCallContext context)
+        public override Task<ChainProgress> GetChainProgress(GetChainProgressIn request, ServerCallContext context)
         {
             return Task.FromResult(chainProgress);
         }

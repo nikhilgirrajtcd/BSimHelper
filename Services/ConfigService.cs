@@ -5,7 +5,7 @@ using Grpc.Core;
 
 using Microsoft.Extensions.Configuration;
 
-namespace BchainSimServices
+namespace BchainSimServices.Services
 {
     public class ConfigService : Config.ConfigBase
     {
@@ -17,14 +17,6 @@ namespace BchainSimServices
         {
             miners = new ConcurrentDictionary<string, MinerInfo>();
             minerStates = new ConcurrentDictionary<MinerInfo, MinerStateInfo>();
-
-            // this needs to be updateable
-            MiningParams = new MiningParams
-            {
-                NRoundBlocks = 5,
-                RoundBlockChallengeSize = 5,
-                TransactionBlockChallengeSize = 0
-            };
         }
 
         public ConfigService(IConfiguration configuration) : base()
