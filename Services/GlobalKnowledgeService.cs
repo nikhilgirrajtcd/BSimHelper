@@ -44,7 +44,7 @@ namespace BchainSimServices.Services
 
         public override Task<ChainProgress> GetChainProgress(GetChainProgressIn request, ServerCallContext context)
         {
-            return Task.FromResult(chainProgress);
+            return Task.FromResult(chainProgress.Clone());
         }
 
         public override Task<ChainProgress> PutChainProgress(BlockProgressIn request, ServerCallContext context)
@@ -64,6 +64,11 @@ namespace BchainSimServices.Services
 
                             currentBlock.BlockIndex = currentBlock.BlockIndex + 1;
                             currentBlock.MinerRoundBlockProgress.Clear();
+
+                            UnstallIfAny(chainProgress, currentBlock);
+
+                            if (ShouldStall(chainProgress, currentBlock))
+                                currentBlock.Stall = true;
                         }
                         else
                         {
@@ -78,10 +83,47 @@ namespace BchainSimServices.Services
             }
             else
             {
-                currentBlock.MinerRoundBlockProgress[request.MinerId] = request.Progress;
+                lock (lockObj)
+                {
+                    currentBlock.MinerRoundBlockProgress[request.MinerId] = request.Progress;
+                }
             }
 
-            return Task.FromResult(chainProgress);
+            return Task.FromResult(chainProgress.Clone());
+        }
+
+        private bool ShouldStall(ChainProgress chainProgress, BlockProgress currentBlock)
+        {
+            int lastBlockOrdinal = ConfigService.MiningParams.NParallelBlocks - 1;
+            int otherDependentBlockOrdinal = currentBlock.BlockOrdinal == lastBlockOrdinal ? 0 : currentBlock.BlockOrdinal + 1;
+            int otherDependentBlockIndex = currentBlock.BlockIndex - 1;
+            if (chainProgress.BlockProgress[otherDependentBlockOrdinal].BlockIndex <= otherDependentBlockIndex)
+            {
+                return true;
+            }
+
+            if (chainProgress.BlockProgress[otherDependentBlockOrdinal].BlockIndex == otherDependentBlockIndex)
+            {
+                return chainProgress.BlockProgress[otherDependentBlockOrdinal].Stall;
+            }
+
+            return false;
+        }
+
+        private void UnstallIfAny(ChainProgress chainProgress, BlockProgress currentBlock)
+        {
+            int lastBlockOrdinal = ConfigService.MiningParams.NParallelBlocks - 1;
+            int otherDependentBlockOrdinal = currentBlock.BlockOrdinal == 0 ? lastBlockOrdinal : currentBlock.BlockOrdinal - 1;
+            int otherDependentBlockIndex = currentBlock.BlockIndex;
+            if (chainProgress.BlockProgress[otherDependentBlockOrdinal].BlockIndex == otherDependentBlockIndex)
+            {
+                chainProgress.BlockProgress[otherDependentBlockOrdinal].Stall = false;
+            }
+
+            if (chainProgress.BlockProgress[otherDependentBlockOrdinal].BlockIndex == otherDependentBlockIndex)
+            {
+                chainProgress.BlockProgress[otherDependentBlockOrdinal].Stall = false;
+            }
         }
     }
 }
